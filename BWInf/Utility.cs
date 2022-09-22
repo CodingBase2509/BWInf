@@ -6,7 +6,7 @@ namespace BWInf;
 public static class Utility
 {
 
-    private static Dictionary<int, int[]> Fields { get; } = new()
+    public static Dictionary<int, int[]> FieldsDict { get; } = new()
     {
         {1, new[] { 8, 4, 18 } },
         {2, new[] { 3, 19 } },
@@ -29,36 +29,27 @@ public static class Utility
         {19, new[] { 20 } },
         {20, new[] { 3, 10 } },
     };
-
-    public static Dictionary<int, int[]> GetFields => Fields;
-
+ 
     public static List<Field> FieldsList { get; set; } = new();
-
-    public static List<Path> Paths { get; private set; } = new();
 
     public static void AddPath(this Person person, Path path)
     {
-        bool cantEnter = true;
+        bool cantEnter;
         do
         {
-            if (Monitor.TryEnter(Paths) &&
-                Monitor.TryEnter(person.Paths))
+            if (cantEnter = Monitor.TryEnter(person.Paths))
             {
                 try
                 {
-                    Paths.Add(path);
                     person.Paths.Add(path);
-                    cantEnter = false;
                 }
                 finally
                 {
-                    Monitor.Exit(Paths);
                     Monitor.Exit(person.Paths);
+                    cantEnter = false;
                 }
             }
         } while (cantEnter);
-
-        cantEnter = true;
     }
 
 }
@@ -100,20 +91,43 @@ public class Field
 {
     public int Value { get; init; }
 
-    public int[] NextPossibleFields { get; init; } = Array.Empty<int>();
+    public Field[] NextPossibleFields { get; private set; } = Array.Empty<Field>();
 
-    public Field(int value, int[] nextFields)
+    public Person? PersonOnField { get; set; }
+
+    public Person? SecondPerson { get; set; }
+
+    public Field(int value)
     {
         Value = value;
-        NextPossibleFields = nextFields;
     }
 
-    public static IList<Field> Create()
+    public static void CreateFields()
+    {
+        CreateList();
+        CreateNextValues();
+    }
+
+    private static void CreateList()
     {
         List<Field> f = new();
-        foreach (var field in Utility.GetFields)
-            f.Add(new Field(field.Key, field.Value));
-        return f;
+        foreach (var field in Utility.FieldsDict)
+            f.Add(new Field(field.Key));
+        Utility.FieldsList = f;
+    }
+
+    private static void CreateNextValues()
+    {
+        foreach (var field in Utility.FieldsList)
+        {
+            var values = Utility.FieldsDict[field.Value];
+            foreach (var val in values)
+            {
+                field.NextPossibleFields = Utility.FieldsList
+                    .Where(f => f.Value == val)
+                    .ToArray();
+            }
+        }
     }
 
 }
@@ -125,9 +139,11 @@ public class Person
 {
     public string Name { get; init; }
 
-    public int StartField { get; init; }
+    public Field StartField { get; init; }
 
     public List<Path> Paths { get; set; }
+
+    public bool FinishRun { get; set; }
 }
 
 
