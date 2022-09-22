@@ -1,0 +1,5 @@
+/Users/fabian/Projects/C#/BWInf/BWInf/obj/Debug/net6.0/BWInf.csproj.AssemblyReference.cache
+/Users/fabian/Projects/C#/BWInf/BWInf/obj/Debug/net6.0/BWInf.GeneratedMSBuildEditorConfig.editorconfig
+/Users/fabian/Projects/C#/BWInf/BWInf/obj/Debug/net6.0/BWInf.AssemblyInfoInputs.cache
+/Users/fabian/Projects/C#/BWInf/BWInf/obj/Debug/net6.0/BWInf.AssemblyInfo.cs
+/Users/fabian/Projects/C#/BWInf/BWInf/obj/Debug/net6.0/BWInf.csproj.CoreCompileInputs.cache
