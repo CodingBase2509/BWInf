@@ -29,6 +29,7 @@ public class Program
         };
 
         await Start(p1, p2);
+        Console.ReadKey();
     }
 
     public static async Task Start(Person person1, Person person2)
@@ -63,12 +64,6 @@ public class Program
         {
             OneStep.Add(Task.Run(async () =>
             {
-                //string cw = "";
-                //foreach (var f in fieldsToMoveFrom1)
-                //    cw = f.Value.ToString() + ", ";
-
-                //Console.WriteLine("Fields to move from (p1): " + cw);
-
                 var nextFields = await ForEachField(person1, fieldsToMoveFrom1);
 
                 p1Hit = person1.FinishRun;
@@ -85,12 +80,6 @@ public class Program
 
             OneStep.Add(Task.Run(async () =>
             {
-                //string cw = "";
-                //foreach (var f in fieldsToMoveFrom2)
-                //    cw = f.Value.ToString() + ", ";
-
-                //Console.WriteLine("Fields to move from (p2): " + cw);
-
                 var nextFields = await ForEachField(person2, fieldsToMoveFrom2);
 
                 p2Hit = person2.FinishRun;
@@ -188,16 +177,6 @@ public class Program
         Console.WriteLine(pathAsString + "finish");
         Console.WriteLine("");
 
-        //Console.WriteLine("all paths:");
-        //foreach (var path in person.Paths.OrderByDescending(p => p.FieldCount).ToList())
-        //{
-        //    string pathString = "";
-        //    foreach (var lastField in path.Value)
-        //    {
-        //        pathString += lastField.Value.ToString() + " - ";
-        //    }
-        //    Console.WriteLine(pathString);
-        //}
         return shortestPath.Value[shortestPath.FieldCount - 1];
     }
 
