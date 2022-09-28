@@ -8,25 +8,32 @@
     "net6.0": []
   },
   "packageFolders": {
-    "/Users/fabian/.nuget/packages/": {}
+    "C:\\Users\\Dasler\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/fabian/Projects/C#/BWInf/BWInf/BWInf.csproj",
+      "projectUniqueName": "C:\\Users\\Dasler\\Projects\\BWInf\\BWInf\\BWInf.csproj",
       "projectName": "BWInf",
-      "projectPath": "/Users/fabian/Projects/C#/BWInf/BWInf/BWInf.csproj",
-      "packagesPath": "/Users/fabian/.nuget/packages/",
-      "outputPath": "/Users/fabian/Projects/C#/BWInf/BWInf/obj/",
+      "projectPath": "C:\\Users\\Dasler\\Projects\\BWInf\\BWInf\\BWInf.csproj",
+      "packagesPath": "C:\\Users\\Dasler\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Dasler\\Projects\\BWInf\\BWInf\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/fabian/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Dasler\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -60,7 +67,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.401/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }
