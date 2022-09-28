@@ -1,4 +1,6 @@
 ﻿using System.Collections.Concurrent;
+using static BWInf.Classes;
+using Path = BWInf.Classes.Path;
 
 namespace BWInf;
 
@@ -8,7 +10,7 @@ public class Program
     public static async Task Main(string[] args)
     {
         // preparation
-        Field.CreateFields();
+        Field.CreateFields(Utility.FieldsDict);
 
         var p1 = new Person()
         {
@@ -34,11 +36,13 @@ public class Program
 
     public static async Task Start(Person person1, Person person2)
     {
+        // Liste mit laufenden Tasks
         List<Task> OneStep = new();
-
-        bool p1Hit = false;
         
+        // Variablen für Person 1
+        bool p1Hit = false;
         var path1 = new Path();
+
         path1.AddField(person1.StartField);
         person1.AddPath(path1);
 
@@ -49,9 +53,10 @@ public class Program
 
         //--------------------------------------------
 
+        // Variablen für Person 2
         bool p2Hit = false;
-
         var path2 = new Path();
+
         path2.AddField(person2.StartField);
         person2.AddPath(path2);
 
@@ -108,8 +113,8 @@ public class Program
         foreach (var field in fieldsToMoveFrom)
         {
             var path = person.Paths
-                .OrderByDescending(pp => pp.FieldCount)
-                .Where(pp => pp.Value[pp.FieldCount - 1] == field)
+                .OrderByDescending(pp => pp.Count)
+                .Where(pp => pp.Value[pp.Count - 1] == field)
                 .FirstOrDefault();
 
             tasks.Add(Task.Run(async () =>
@@ -162,8 +167,8 @@ public class Program
     public static Field Finish(Person person)
     {
         var shortestPath = person.Paths
-            .Where(p => p.Value[p.FieldCount - 1].SecondPerson is not null)
-            .OrderByDescending(fp => fp.FieldCount)
+            .Where(p => p.Value[p.Count - 1].SecondPerson is not null)
+            .OrderByDescending(fp => fp.Count)
             .FirstOrDefault();
 
         string pathAsString = "";
@@ -177,14 +182,14 @@ public class Program
         Console.WriteLine(pathAsString + "finish");
         Console.WriteLine("");
 
-        return shortestPath.Value[shortestPath.FieldCount - 1];
+        return shortestPath.Value[shortestPath.Count - 1];
     }
 
     public static void ReviewOtherPerson(Person person, Field field)
     {
         var shortestPath = person.Paths
-            .Where(p => p.Value[p.FieldCount - 1] == field)
-            .OrderByDescending(fp => fp.FieldCount)
+            .Where(p => p.Value[p.Count - 1] == field)
+            .OrderByDescending(fp => fp.Count)
             .FirstOrDefault();
 
         string pathAsString = "";

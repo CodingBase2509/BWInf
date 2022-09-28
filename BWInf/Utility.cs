@@ -1,11 +1,13 @@
-﻿
-using System.Collections.Concurrent;
+﻿using static BWInf.Classes;
+using Path = BWInf.Classes.Path;
 
 namespace BWInf;
 
 public static class Utility
 {
-
+    /// <summary>
+    /// Key: Value des Feldes, Value: Array mit den values von den zu erreichenden Feldern
+    /// </summary>
     public static Dictionary<int, int[]> FieldsDict { get; } = new()
     {
         {1, new[] { 8, 4, 18 } },
@@ -30,8 +32,16 @@ public static class Utility
         {20, new[] { 3, 10 } },
     };
  
+    /// <summary>
+    /// Eine Liste mit den fertigen <see cref="Field"/> Objekten
+    /// </summary>
     public static List<Field> FieldsList { get; set; } = new();
 
+    /// <summary>
+    /// Eine threadsichere Methode um einer <see cref="Person"/> einen <see cref="Path"/> hinzuzufügen
+    /// </summary>
+    /// <param name="person">Die Person der der <see cref="Path"/> hinzugefügt werden soll</param>
+    /// <param name="path">Der <see cref="Path"/> der hinzugefügt werden soll</param>
     public static void AddPath(this Person person, Path path)
     {
         bool cantEnter;
@@ -51,100 +61,4 @@ public static class Utility
             }
         } while (cantEnter);
     }
-
 }
-
-/// <summary>
-/// Pfad
-/// </summary>
-public class Path
-{
-    public Field[] Value { get; private set; } = Array.Empty<Field>();
-
-    public int FieldCount => Value.Length;
-
-    public void AddField(Field field)
-    {
-        var newVal = new Field[Value.Length + 1];
-
-        for (int i = 0; i < Value.Length; i++)
-            newVal[i] = Value[i];
-
-        newVal[Value.Length] = field;
-
-        Value = newVal;
-    }
-
-    public Path Clone()
-    {
-        return new Path()
-        {
-            Value = (Field[])this.Value.Clone()
-        };
-    } 
-}
-
-/// <summary>
-/// Feld
-/// </summary>
-public class Field
-{
-    public int Value { get; init; }
-
-    public Field[] NextPossibleFields { get; private set; } = Array.Empty<Field>();
-
-    public Person? PersonOnField { get; set; }
-
-    public Person? SecondPerson { get; set; }
-
-    public Field(int value)
-    {
-        Value = value;
-    }
-
-    public static void CreateFields()
-    {
-        CreateList();
-        CreateNextValues();
-    }
-
-    private static void CreateList()
-    {
-        List<Field> f = new();
-        foreach (var field in Utility.FieldsDict)
-            f.Add(new Field(field.Key));
-        Utility.FieldsList = f;
-    }
-
-    private static void CreateNextValues()
-    {
-        foreach (var field in Utility.FieldsList)
-        {
-            var values = Utility.FieldsDict[field.Value];
-            foreach (var val in values)
-            {
-                field.NextPossibleFields = Utility.FieldsList
-                    .Where(f => f.Value == val)
-                    .ToArray();
-            }
-        }
-    }
-
-}
-
-/// <summary>
-/// Person
-/// </summary>
-public class Person
-{
-    public string Name { get; init; }
-
-    public Field StartField { get; init; }
-
-    public List<Path> Paths { get; set; }
-
-    public bool FinishRun { get; set; }
-}
-
-
-
