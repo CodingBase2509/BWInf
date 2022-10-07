@@ -16,7 +16,7 @@ public class Program
         {
             Name = "Sasha",
             StartField = Utility.FieldsList
-                .Where(f => Equals(f.Value, 1))
+                .Where(f => Equals(f.Value, 2))
                 .SingleOrDefault()!,
             Paths = new()
         };
@@ -25,7 +25,7 @@ public class Program
         {
             Name = "Mika",
             StartField = Utility.FieldsList
-                .Where(f => Equals(f.Value, 2))
+                .Where(f => Equals(f.Value, 1))
                 .SingleOrDefault()!,
             Paths = new()
         };
@@ -133,6 +133,11 @@ public class Program
         List<Task> tasks = new();
         ConcurrentBag<Field> fields = new();
 
+        Utility.FieldsList
+            .Where(field => !fieldsToMoveFrom.Contains(field))
+            .AsParallel()
+            .ForAll(field => field.PersonOnField = null);
+
         foreach (var field in fieldsToMoveFrom)
         {
             // sucht den Pfad von der Person, wo das aktuelle Feld das letzte Element ist
@@ -211,10 +216,15 @@ public class Program
         return fields.ToList();
     }
 
+    /// <summary>
+    /// Gibt Informationen über die Person und den Pfad, durch den das Programm beendet wurde
+    /// </summary>
+    /// <param name="person">Die Person, die das "Rennen" beendet hat</param>
+    /// <returns>Das Feld, auf dem Sich beide Personen getroffen haben</returns>
     public static Field Finish(Person person)
     {
         var shortestPath = person.Paths
-            .Where(p => p.Value[p.Count - 1].SecondPerson is not null)
+            .Where(p => p.Value[^1].SecondPerson is not null)
             .OrderByDescending(fp => fp.Count)
             .FirstOrDefault();
 
@@ -235,21 +245,26 @@ public class Program
         return shortestPath.Value[shortestPath.Count - 1];
     }
 
+    /// <summary>
+    /// Gibt Informationen über die andere Person und dessen Pfad
+    /// </summary>
+    /// <param name="person">Die andere Person, die das Programm nicht beendet hat</param>
+    /// <param name="field">Das Feld auf dem sich beide Personen getroffen haben</param>
     public static void ReviewOtherPerson(Person person, Field field)
     {
         var shortestPath = person.Paths
-            .Where(p => p.Value[p.Count - 1] == field)
+            .Where(p => p.Value[^1] == field)
             .OrderByDescending(fp => fp.Count)
             .FirstOrDefault();
 
         string pathAsString = "";
 
-        foreach (var lastField in shortestPath!.Value)
+        foreach (var pathField in shortestPath!.Value)
         {
-            if (Equals(lastField, person.StartField))
-                pathAsString += field.Value.ToString() + " (start Feld) - ";
+            if (Equals(pathField, person.StartField))
+                pathAsString += pathField.Value.ToString() + " (start Feld) - ";
             else
-                pathAsString += field.Value.ToString() + " - ";
+                pathAsString += pathField.Value.ToString() + " - ";
         }
 
         Console.WriteLine($"Shortest path for {person.Name}:");
