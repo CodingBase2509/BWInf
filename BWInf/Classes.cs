@@ -111,12 +111,17 @@ public class Classes
             foreach (var field in Utility.FieldsList)
             {
                 var values = fieldDict[field.Value];
+                var nextFields = new List<Field>();
+
                 foreach (var val in values)
                 {
-                    field.NextPossibleFields = Utility.FieldsList
-                        .Where(f => f.Value == val)
-                        .ToArray();
+                    var nf = Utility.FieldsList.Find(f => f.Value == val);
+
+                    if (nf is not null)
+                        nextFields.Add(nf);
                 }
+
+                field.NextPossibleFields = nextFields.ToArray();
             }
         }
 

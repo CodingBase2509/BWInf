@@ -5,6 +5,15 @@ VisualStudioVersion = 25.0.1704.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BWInf", "BWInf\BWInf.csproj", "{98FEBB4F-DE32-48A2-B4DD-2D0A1BF54C74}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{653931A5-B59D-4B35-A241-5655BB2E1221}"
+	ProjectSection(SolutionItems) = preProject
+		huepfburg0.txt = huepfburg0.txt
+		huepfburg1.txt = huepfburg1.txt
+		huepfburg4.txt = huepfburg4.txt
+		huepfburg3.txt = huepfburg3.txt
+		huepfburg2.txt = huepfburg2.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

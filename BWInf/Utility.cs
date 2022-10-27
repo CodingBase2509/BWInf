@@ -8,7 +8,7 @@ public static class Utility
     /// <summary>
     /// Key: Value des Feldes, Value: Array mit den values von den zu erreichenden Feldern
     /// </summary>
-    public static Dictionary<int, int[]> FieldsDict { get; } = new()
+    public static Dictionary<int, int[]> FieldsDict { get; set; } = new()
     {
         {1, new[] { 8, 4, 18 } },
         {2, new[] { 3, 19 } },
@@ -60,5 +60,47 @@ public static class Utility
                 }
             }
         } while (cantEnter);
+    }
+
+    public static Dictionary<int, int[]> ReadTextfile(string path)
+    {
+        var tempFiledDict = new Dictionary<int, int[]>();
+
+        using StreamReader sr = new StreamReader(File.Open(path, FileMode.Open));
+
+        while (!sr.EndOfStream)
+        {
+            int key = 0;
+            int value = 0;
+
+            try
+            {
+                var line = (sr.ReadLine() ?? "").Split(" ");
+                if (line.Length == 0)
+                    continue;
+
+                key = int.Parse(line[0]);
+                value = int.Parse(line[1]);
+
+            }catch(IOException ex)
+            {
+                Console.WriteLine("Fehler beim einlesen der Textdatei:");
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+            }
+
+            if (!tempFiledDict.ContainsKey(key))
+                tempFiledDict.Add(key, Array.Empty<int>());
+
+            tempFiledDict[key] = tempFiledDict[key].Append(value).ToArray();
+        }
+
+        foreach(var kvp in tempFiledDict)
+        {
+            if (kvp.Value is null)
+                tempFiledDict[kvp.Key] = Array.Empty<int>();
+        }
+
+        return tempFiledDict;
     }
 }

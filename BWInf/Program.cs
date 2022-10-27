@@ -9,15 +9,46 @@ public class Program
 
     public static async Task Main(string[] args)
     {
-        // preparation
-        Field.CreateFields(Utility.FieldsDict);
+        while (true)
+        {
+            Console.WriteLine("Standard Felder nehmen (s) oder Textdatei laden? (t)");
+            var input = Console.ReadLine();
+
+            if (Equals(input, "s"))
+            {
+                // preparation
+                Field.CreateFields(Utility.FieldsDict);
+                break;
+            }
+            else if (Equals(input, "t"))
+            {
+                Directory.SetCurrentDirectory("/Users/fabian/Projects/C#/BWInf");
+                Console.WriteLine("Verfügbare Dateien:");
+                foreach (var file in Directory.EnumerateFiles(Directory.GetCurrentDirectory()))
+                {
+                    Console.WriteLine(file);
+                }
+
+                Console.Write("Pfad zur Textdatei: ");
+                var path = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(path))
+                    Environment.Exit(666);
+
+                Utility.FieldsDict = Utility.ReadTextfile(path);
+                Field.CreateFields(Utility.FieldsDict);
+                break;
+            }
+            else
+                continue;
+        }
 
         var p1 = new Person()
         {
             Name = "Sasha",
             StartField = Utility.FieldsList
-                .Where(f => Equals(f.Value, 2))
-                .SingleOrDefault()!,
+               .Where(f => Equals(f.Value, 2))
+               .SingleOrDefault()!,
             Paths = new()
         };
 
@@ -133,10 +164,10 @@ public class Program
         List<Task> tasks = new();
         ConcurrentBag<Field> fields = new();
 
-        Utility.FieldsList
-            .Where(field => !fieldsToMoveFrom.Contains(field))
-            .AsParallel()
-            .ForAll(field => field.PersonOnField = null);
+        //Utility.FieldsList
+        //    .Where(field => !fieldsToMoveFrom.Contains(field))
+        //    .AsParallel()
+        //    .ForAll(field => field.PersonOnField = null);
 
         foreach (var field in fieldsToMoveFrom)
         {
@@ -182,8 +213,11 @@ public class Program
             tasks.Add(Task.Run(() =>
             {
                 // prüft ob eine Person auf dem Feld steht und es die Person selbst ist
-                if (nextfield.PersonOnField is not null && Equals(nextfield.PersonOnField, person))
-                    return;
+                if (nextfield.PersonOnField is not null)
+                {
+                    if(Equals(nextfield.PersonOnField, person))
+                        return;
+                }
 
                 // kopiert den Pfad für das neue Feld
                 var nextPath = path.Clone();
