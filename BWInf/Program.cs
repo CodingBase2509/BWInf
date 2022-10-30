@@ -22,11 +22,15 @@ public class Program
             }
             else if (Equals(input, "t"))
             {
-                Directory.SetCurrentDirectory("/Users/fabian/Projects/C#/BWInf");
+                Console.WriteLine("Pfad zum Solution-Folder der Anwendungen angeben: ");
+                input = Console.ReadLine();
+
+                Directory.SetCurrentDirectory(String.IsNullOrEmpty(input) ? "/Users/fabian/Projects/C#/BWInf" : input);
                 Console.WriteLine("Verfügbare Dateien:");
                 foreach (var file in Directory.EnumerateFiles(Directory.GetCurrentDirectory()))
                 {
-                    Console.WriteLine(file);
+                    if (file.Contains(".txt"))
+                        Console.WriteLine(file);
                 }
 
                 Console.Write("Pfad zur Textdatei: ");
@@ -150,7 +154,7 @@ public class Program
             OneStep.Clear();
 
         // führt die Schritte so lange aus, solange die Personen sich nicht treffen
-        } while (!(p1Hit && p2Hit));
+        } while (!p1Hit && !p2Hit);
     }
 
     /// <summary>
@@ -180,7 +184,7 @@ public class Program
             tasks.Add(Task.Run(async () =>
             {
                 // geht für das ausgewählte Feld einen schritt weiter
-                var newFields = await MoveNextField(person, field, path!.Clone());
+                var newFields = await MoveNextField(person, field, path!);
                 
                 // setzt die nächsten felder auf die Liste
                 foreach (var nf in newFields)
